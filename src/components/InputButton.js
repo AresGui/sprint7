@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-const InputButton = ({ initialValue, onChange }) => {
+const InputButton = ({ initialValue, onChange, name }) => {
     const [value, setValue] = useState(initialValue);
+
 
     const handleIncrement = () => {
         setValue(value + 1);
@@ -19,10 +20,13 @@ const InputButton = ({ initialValue, onChange }) => {
         onChange(newValue);
     };
 
+
+
+
     return (
         <form>
             <button onClick={handleIncrement}>+</button>
-            <input type="number" value={value} onChange={handleChange} />
+            <input type="number" name={name} value={value} onChange={handleChange} />
             <button onClick={handleDecrement}>-</button>
         </form>
     );

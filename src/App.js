@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './App.css';
 import { Panell, Opcion, Label } from './styled';
+import InputButton from './components/InputButton'
 
 
 function App() {
@@ -14,6 +15,8 @@ function App() {
   const [selectedServices, setSelectedServices] = useState([]);
 
   const [totalPrice, setTotalPrice] = useState(0);
+
+  const [isFirstServiceSelected, setIsFirstServiceSelected] = useState(false);
 
   const handleChange = (event) => {
     const serviceId = parseInt(event.target.id);
@@ -29,8 +32,6 @@ function App() {
     }
   }
 
-  const [isFirstServiceSelected, setIsFirstServiceSelected] = useState(false);
-
   const handleFirstService = (serviceId) => {
     if (serviceId === 1) {
       setIsFirstServiceSelected(true);
@@ -39,68 +40,27 @@ function App() {
     }
   };
 
+  //////////////////////
+
   const [input, setInput] = useState({
     paginas: "",
     idiomas: ""
   })
 
-  const handleInputChange = (event) => {
+  const handleNumberChange = (value) => {
 
-    /* setInput({
-      ...input,
-      [event.target.name]: parseInt(event.target.value)
-    }) */
 
-    const { name, value } = event.target;
+    const { name, value } = InputButton;
 
-    // Pasar input vacío a 0
-    const parsedValue = value.trim() === "" ? 0 : parseInt(value);
+
 
     setInput({
       ...input,
-      [name]: parsedValue
+      [name]: value
     });
-  }
-
-  useEffect(() => {
-    const calculatedPrice = input.paginas * input.idiomas * 30;
-    setTotalPrice(totalPrice + calculatedPrice);
-  }, [input]);
-
-  //Cada vez que se selecciona o deselecciona un servicio, se comprueba si el array selectedServices está vacío, sí es así, el precio pasa a 0
-  useEffect(() => {
-    if (selectedServices.length === 0) {
-      setInput({
-        paginas: "",
-        idiomas: ""
-      })
-      setTotalPrice(0);
-    }
-  }, [selectedServices]);
-
-  /* const sendData = (event) => {
-    event.preventDefault();
-  } */
+  };
 
 
-
-  const handleFirstIncrement = () => {
-    input.paginas += 1;
-  }
-
-  const handleFirstDecrement = () => {
-    input.paginas -= 1;
-  }
-
-
-
-  const handleSecondIncrement = () => {
-    input.idiomas += 1;
-  }
-
-  const handleSecondDecrement = () => {
-    input.idiomas -= 1;
-  }
 
   return (
     <div>
@@ -115,18 +75,20 @@ function App() {
               {service.title}
             </label>
             {service.id === 1 && isFirstServiceSelected && (
-              <Panell /* onSubmit={sendData} */>
+              <Panell>
                 <Opcion>
                   <Label>Número de páginas</Label>
-                  <button onClick={handleFirstIncrement}>+</button>
+                  <InputButton initialValue={0} onChange={handleNumberChange} name="paginas" value={value} />
+                  {/* <button onClick={handleFirstIncrement}>+</button>
                   <input type="text" onChange={handleInputChange} value={input.paginas} name="paginas" />
-                  <button onClick={handleFirstDecrement}>-</button>
+                  <button onClick={handleFirstDecrement}>-</button> */}
                 </Opcion>
                 <Opcion>
                   <Label>Número de idiomas</Label>
-                  <button onClick={handleSecondIncrement}>+</button>
+                  <InputButton initialValue={0} onChange={handleNumberChange} name="idiomas" value={value} />
+                  {/* <button onClick={handleSecondIncrement}>+</button>
                   <input type="text" onChange={handleInputChange} value={input.idiomas} name="idiomas" />
-                  <button onClick={handleSecondDecrement}>-</button>
+                  <button onClick={handleSecondDecrement}>-</button> */}
                 </Opcion>
               </Panell>
             )}
