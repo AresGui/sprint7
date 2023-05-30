@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import { Panell, Opcion, Label } from './styled';
 import InputButton from './components/InputButton'
+
 
 
 function App() {
@@ -28,7 +29,15 @@ function App() {
     } else {
       setSelectedServices(selectedServices.filter((id) => id !== serviceId));
       setTotalPrice(totalPrice - parseInt(event.target.value));
-      setIsFirstServiceSelected(false);
+
+      if (serviceId === 1) {
+        setIsFirstServiceSelected(false);
+        setInput(prevInput => ({
+          ...prevInput,
+          paginas: 0,
+          idiomas: 0
+        }));
+      }
     }
   }
 
@@ -40,27 +49,33 @@ function App() {
     }
   };
 
-  //////////////////////
 
   const [input, setInput] = useState({
-    paginas: "",
-    idiomas: ""
-  })
+    paginas: 0,
+    idiomas: 0
+  });
 
-  const handleNumberChange = (value) => {
+  const handleNumberChange = (name, value) => {
+    const parsedValue = value === "" ? 0 : parseInt(value);
 
-
-    const { name, value } = InputButton;
-
-
-
-    setInput({
-      ...input,
-      [name]: value
-    });
+    setInput(prevInput => ({
+      ...prevInput,
+      [name]: parsedValue
+    }));
   };
 
+  useEffect(() => {
+    const calculatedPrice = input.paginas * input.idiomas * 30;
+    setTotalPrice(services.reduce((sum, service) => {
+      if (selectedServices.includes(service.id)) {
+        return sum + service.price;
+      }
+      return sum;
+    }, calculatedPrice));
+  }, [input.paginas, input.idiomas, selectedServices]);
 
+
+  //Guardar datos en localStorage cuando cambian
 
   return (
     <div>
@@ -78,14 +93,22 @@ function App() {
               <Panell>
                 <Opcion>
                   <Label>Número de páginas</Label>
-                  <InputButton initialValue={0} onChange={handleNumberChange} name="paginas" value={value} />
+                  <InputButton
+                    initialValue={0}
+                    onChange={(value) => handleNumberChange("paginas", value)}
+                    name="paginas"
+                  />
                   {/* <button onClick={handleFirstIncrement}>+</button>
                   <input type="text" onChange={handleInputChange} value={input.paginas} name="paginas" />
                   <button onClick={handleFirstDecrement}>-</button> */}
                 </Opcion>
                 <Opcion>
                   <Label>Número de idiomas</Label>
-                  <InputButton initialValue={0} onChange={handleNumberChange} name="idiomas" value={value} />
+                  <InputButton
+                    initialValue={0}
+                    onChange={(value) => handleNumberChange("idiomas", value)}
+                    name="idiomas"
+                  />
                   {/* <button onClick={handleSecondIncrement}>+</button>
                   <input type="text" onChange={handleInputChange} value={input.idiomas} name="idiomas" />
                   <button onClick={handleSecondDecrement}>-</button> */}
