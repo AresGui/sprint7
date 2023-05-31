@@ -1,17 +1,24 @@
-import { useState } from 'react';
+import { useLocalStorage } from '../useLocalStorage';
 
 const InputButton = ({ initialValue, onChange, name }) => {
-    const [value, setValue] = useState(initialValue);
 
+    const [value, setValue] = useLocalStorage(name, initialValue);
 
-    const handleIncrement = () => {
+    const handleIncrement = (event) => {
+        event.preventDefault();
         setValue(value + 1);
         onChange(value + 1);
     };
 
-    const handleDecrement = () => {
-        setValue(value - 1);
-        onChange(value - 1);
+    const handleDecrement = (event) => {
+        event.preventDefault();
+
+        if (value > 0) {
+            setValue(value - 1);
+            onChange(value - 1);
+        } else {
+            setValue(0);
+        }
     };
 
     const handleChange = (event) => {
@@ -20,15 +27,12 @@ const InputButton = ({ initialValue, onChange, name }) => {
         onChange(newValue);
     };
 
-
-
-
     return (
-        <form>
+        <div>
             <button onClick={handleIncrement}>+</button>
             <input type="number" name={name} value={value} onChange={handleChange} />
             <button onClick={handleDecrement}>-</button>
-        </form>
+        </div>
     );
 };
 
