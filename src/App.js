@@ -89,7 +89,7 @@ function App() {
           <WelcomePage></WelcomePage>
         </Route>
         <Route exact path='/main'>
-          <div>
+          <div className='main-page'>
             <h1 className="header">¿Qué quieres hacer?</h1>
             <ul className="list">
               {services.map((service) =>
