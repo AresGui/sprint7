@@ -1,9 +1,8 @@
-
 import { useLocalStorage } from '../useLocalStorage';
 
 const InputButton = ({ initialValue, onChange, name }) => {
-    const [value, setValue] = useLocalStorage("value", initialValue);
 
+    const [value, setValue] = useLocalStorage(name, initialValue);
 
     const handleIncrement = (event) => {
         event.preventDefault();
@@ -27,7 +26,6 @@ const InputButton = ({ initialValue, onChange, name }) => {
         setValue(newValue);
         onChange(newValue);
     };
-
 
     return (
         <div>
